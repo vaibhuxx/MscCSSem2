@@ -1,0 +1,280 @@
+Q.1) Java Android Program to Demonstrate Alert Dialog Box
+
+JAVA CODE
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button alertDialogButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        alertDialogButton = findViewById(R.id.alert_dialog_button);
+
+        alertDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an AlertDialog builder
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Alert Dialog Example")
+                        .setMessage("This is a simple alert dialog.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Handle OK button click
+                                dialog.dismiss();
+                            }
+                        });
+
+                // Create and show the AlertDialog
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+    }
+}
+
+
+
+XML CODE
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/alert_dialog_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Alert Dialog"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
+
+
+Create an Android application which will ask the user to input his / her name.
+A message should display the two items concatenated in a label. Change the format
+of the label using radio buttons and check boxes for selection. The user can make
+the label text bold, underlined or italic as well as change its color. Also include
+buttons to display the message in the label, clear the text boxes as well as label.
+Finally exit.
+
+
+JAVA CODE
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText nameInput;
+    Button displayButton, clearButton, exitButton;
+    TextView displayLabel;
+    RadioGroup formatRadioGroup;
+    RadioButton boldRadioButton, italicRadioButton, underlineRadioButton;
+    CheckBox redCheckBox, greenCheckBox, blueCheckBox;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        nameInput = findViewById(R.id.name_input);
+        displayButton = findViewById(R.id.display_button);
+        clearButton = findViewById(R.id.clear_button);
+        exitButton = findViewById(R.id.exit_button);
+        displayLabel = findViewById(R.id.display_label);
+        formatRadioGroup = findViewById(R.id.format_radio_group);
+        boldRadioButton = findViewById(R.id.bold_radio_button);
+        italicRadioButton = findViewById(R.id.italic_radio_button);
+        underlineRadioButton = findViewById(R.id.underline_radio_button);
+        redCheckBox = findViewById(R.id.red_check_box);
+        greenCheckBox = findViewById(R.id.green_check_box);
+        blueCheckBox = findViewById(R.id.blue_check_box);
+
+        displayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = nameInput.getText().toString();
+                String message = "Hello, " + name + "!";
+                displayLabel.setText(formatText(message));
+            }
+        });
+
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nameInput.setText("");
+                displayLabel.setText("");
+            }
+        });
+
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    private SpannableString formatText(String message) {
+        SpannableString spannableString = new SpannableString(message);
+
+        // Apply style based on selected radio button
+        int style = 0;
+        if (boldRadioButton.isChecked()) {
+            style = Typeface.BOLD;
+        } else if (italicRadioButton.isChecked()) {
+            style = Typeface.ITALIC;
+        }
+        spannableString.setSpan(new StyleSpan(style), 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Apply underline if selected
+        if (underlineRadioButton.isChecked()) {
+            spannableString.setSpan(new UnderlineSpan(), 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        // Apply color based on selected check boxes
+        if (redCheckBox.isChecked()) {
+            spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        if (greenCheckBox.isChecked()) {
+            spannableString.setSpan(new ForegroundColorSpan(Color.GREEN), 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        if (blueCheckBox.isChecked()) {
+            spannableString.setSpan(new ForegroundColorSpan(Color.BLUE), 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        return spannableString;
+    }
+}
+
+
+XML CODE
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your name"
+        android:layout_margin="16dp"/>
+
+    <Button
+        android:id="@+id/display_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display"
+        android:layout_below="@id/name_input"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
+
+    <Button
+        android:id="@+id/clear_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:layout_toEndOf="@id/display_button"
+        android:layout_alignTop="@id/display_button"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/display_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_below="@id/display_button"
+        android:layout_marginTop="16dp"/>
+
+    <RadioGroup
+        android:id="@+id/format_radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/display_label"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/bold_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bold"/>
+
+        <RadioButton
+            android:id="@+id/italic_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Italic"/>
+
+        <RadioButton
+            android:id="@+id/underline_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Underline"/>
+    </RadioGroup>
+
+    <CheckBox
+        android:id="@+id/red_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Red"
+        android:layout_below="@id/format_radio_group"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
+
+    <CheckBox
+        android:id="@+id/green_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Green"
+        android:layout_toEndOf="@id/red_check_box"
+        android:layout_alignTop="@id/red_check_box"
+        android:layout_marginStart="16dp"/>
+
+    <CheckBox
+        android:id="@+id/blue_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Blue"
+        android:layout_toEndOf="@id/green_check_box"
+        android:layout_alignTop="@id/green_check_box"
+        android:layout_marginStart="16dp"/>
+
+    <Button
+        android:id="@+id/exit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+        android:layout_below="@id/blue_check_box"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
+
+</RelativeLayout>

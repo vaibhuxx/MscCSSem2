@@ -1,0 +1,275 @@
+Create an application that allows the user to enter a number in the textbox
+named „getnum‟. Check whether the number in the textbox „getnum‟ is Palindrome
+or not. Print the message accordingly in the label when the user clicks on the button
+„Check‟.
+
+JAVA CODE
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText getNumEditText;
+    Button checkButton;
+    TextView resultLabel;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        getNumEditText = findViewById(R.id.getnum);
+        checkButton = findViewById(R.id.check_button);
+        resultLabel = findViewById(R.id.result_label);
+
+        checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String numStr = getNumEditText.getText().toString().trim();
+                if (!TextUtils.isEmpty(numStr)) {
+                    int number = Integer.parseInt(numStr);
+                    if (isPalindrome(number)) {
+                        resultLabel.setText(number + " is a palindrome number.");
+                    } else {
+                        resultLabel.setText(number + " is not a palindrome number.");
+                    }
+                } else {
+                    resultLabel.setText("Please enter a number.");
+                }
+            }
+        });
+    }
+
+    private boolean isPalindrome(int number) {
+        int reversedNumber = 0;
+        int originalNumber = number;
+
+        while (number != 0) {
+            int remainder = number % 10;
+            reversedNumber = reversedNumber * 10 + remainder;
+            number /= 10;
+        }
+
+        return originalNumber == reversedNumber;
+    }
+}
+
+
+XML CODE
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/getnum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter a number"
+        android:layout_margin="16dp"/>
+
+    <Button
+        android:id="@+id/check_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check"
+        android:layout_below="@id/getnum"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/result_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:layout_below="@id/check_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+</RelativeLayout>
+
+
+
+Calculator
+
+JAVA CODE
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText operand1EditText, operand2EditText;
+    Button addButton, subtractButton, multiplyButton, divideButton;
+    TextView resultTextView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        operand1EditText = findViewById(R.id.operand1);
+        operand2EditText = findViewById(R.id.operand2);
+        addButton = findViewById(R.id.add_button);
+        subtractButton = findViewById(R.id.subtract_button);
+        multiplyButton = findViewById(R.id.multiply_button);
+        divideButton = findViewById(R.id.divide_button);
+        resultTextView = findViewById(R.id.result_text);
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calculate('+');
+            }
+        });
+
+        subtractButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calculate('-');
+            }
+        });
+
+        multiplyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calculate('*');
+            }
+        });
+
+        divideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calculate('/');
+            }
+        });
+    }
+
+    private void calculate(char operator) {
+        String operand1Str = operand1EditText.getText().toString();
+        String operand2Str = operand2EditText.getText().toString();
+
+        if (operand1Str.isEmpty() || operand2Str.isEmpty()) {
+            Toast.makeText(MainActivity.this, "Please enter both operands", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double operand1 = Double.parseDouble(operand1Str);
+        double operand2 = Double.parseDouble(operand2Str);
+        double result = 0;
+
+        switch (operator) {
+            case '+':
+                result = operand1 + operand2;
+                break;
+            case '-':
+                result = operand1 - operand2;
+                break;
+            case '*':
+                result = operand1 * operand2;
+                break;
+            case '/':
+                if (operand2 != 0) {
+                    result = operand1 / operand2;
+                } else {
+                    Toast.makeText(MainActivity.this, "Cannot divide by zero", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                break;
+        }
+
+        resultTextView.setText(String.valueOf(result));
+    }
+}
+
+XML CODE
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/operand1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="16dp"
+        android:hint="Enter operand 1"
+        android:inputType="number"/>
+
+    <EditText
+        android:id="@+id/operand2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/operand1"
+        android:layout_alignStart="@id/operand1"
+        android:layout_marginTop="16dp"
+        android:hint="Enter operand 2"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/operand2"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Add"
+        android:layout_toEndOf="@id/operand2"/>
+
+    <Button
+        android:id="@+id/subtract_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_button"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Subtract"
+        android:layout_toEndOf="@id/operand2"/>
+
+    <Button
+        android:id="@+id/multiply_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subtract_button"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Multiply"
+        android:layout_toEndOf="@id/operand2"/>
+
+    <Button
+        android:id="@+id/divide_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/multiply_button"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Divide"
+        android:layout_toEndOf="@id/operand2"/>
+
+    <TextView
+        android:id="@+id/result_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:textSize="24sp"/>
+
+</RelativeLayout>

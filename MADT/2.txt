@@ -1,0 +1,217 @@
+Create an application that allows the user to enter a number in the textbox. 
+Check whether the number in the textbox is perfect number or not. Print the 
+message using Toast control.
+
+JAVA CODE
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText numberInput;
+    Button checkButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        numberInput = findViewById(R.id.number_input);
+        checkButton = findViewById(R.id.check_button);
+
+        checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String numberStr = numberInput.getText().toString();
+                if (!numberStr.isEmpty()) {
+                    int number = Integer.parseInt(numberStr);
+                    if (isPerfectNumber(number)) {
+                        showToast("The entered number is a perfect number!");
+                    } else {
+                        showToast("The entered number is not a perfect number.");
+                    }
+                } else {
+                    showToast("Please enter a number.");
+                }
+            }
+        });
+    }
+
+    private boolean isPerfectNumber(int number) {
+        int sum = 0;
+        for (int i = 1; i <= number / 2; i++) {
+            if (number % i == 0) {
+                sum += i;
+            }
+        }
+        return sum == number;
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+}
+
+
+XML CODE
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/number_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter a number"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/check_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check" />
+</LinearLayout>
+
+
+
+Q.2) Java Android Program to perform all arithmetic Operations using Calculator.
+
+JAVA CODE
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    EditText num1EditText, num2EditText;
+    Button addButton, subtractButton, multiplyButton, divideButton;
+    TextView resultTextView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        num1EditText = findViewById(R.id.num1_editText);
+        num2EditText = findViewById(R.id.num2_editText);
+        addButton = findViewById(R.id.add_button);
+        subtractButton = findViewById(R.id.subtract_button);
+        multiplyButton = findViewById(R.id.multiply_button);
+        divideButton = findViewById(R.id.divide_button);
+        resultTextView = findViewById(R.id.result_textView);
+
+        addButton.setOnClickListener(this);
+        subtractButton.setOnClickListener(this);
+        multiplyButton.setOnClickListener(this);
+        divideButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        double num1 = Double.parseDouble(num1EditText.getText().toString());
+        double num2 = Double.parseDouble(num2EditText.getText().toString());
+        double result = 0;
+
+        switch (v.getId()) {
+            case R.id.add_button:
+                result = num1 + num2;
+                break;
+            case R.id.subtract_button:
+                result = num1 - num2;
+                break;
+            case R.id.multiply_button:
+                result = num1 * num2;
+                break;
+            case R.id.divide_button:
+                if (num2 != 0) {
+                    result = num1 / num2;
+                } else {
+                    resultTextView.setText("Cannot divide by zero!");
+                    return;
+                }
+                break;
+        }
+
+        resultTextView.setText("Result: " + result);
+    }
+}
+
+
+XML CODE
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/num1_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter number 1"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/num2_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/num1_editText"
+        android:layout_marginTop="16dp"
+        android:hint="Enter number 2"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/num2_editText"
+        android:layout_marginTop="16dp"
+        android:text="Add" />
+
+    <Button
+        android:id="@+id/subtract_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_button"
+        android:layout_marginTop="16dp"
+        android:text="Subtract" />
+
+    <Button
+        android:id="@+id/multiply_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subtract_button"
+        android:layout_marginTop="16dp"
+        android:text="Multiply" />
+
+    <Button
+        android:id="@+id/divide_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/multiply_button"
+        android:layout_marginTop="16dp"
+        android:text="Divide" />
+
+    <TextView
+        android:id="@+id/result_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divide_button"
+        android:layout_marginTop="16dp"
+        android:text=""
+        android:textSize="20sp" />
+
+</RelativeLayout>

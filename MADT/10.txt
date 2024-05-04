@@ -1,0 +1,238 @@
+Create an application that allows the user to enter a number in the textbox
+named getnum. Check whether the number in the textbox getnum is Armstrong or
+not. Print the message using Toast control when the user clicks on the button
+Check.
+
+JAVA CODE
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText getNumEditText;
+    Button checkButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        getNumEditText = findViewById(R.id.getnum);
+        checkButton = findViewById(R.id.check_button);
+
+        checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String numStr = getNumEditText.getText().toString().trim();
+                if (!numStr.isEmpty()) {
+                    int number = Integer.parseInt(numStr);
+                    if (isArmstrong(number)) {
+                        showToast(number + " is an Armstrong number.");
+                    } else {
+                        showToast(number + " is not an Armstrong number.");
+                    }
+                } else {
+                    showToast("Please enter a number.");
+                }
+            }
+        });
+    }
+
+    private boolean isArmstrong(int number) {
+        int originalNumber, remainder, result = 0, n = 0;
+        originalNumber = number;
+
+        // Count number of digits
+        for (originalNumber = number; originalNumber != 0; originalNumber /= 10, ++n);
+
+        originalNumber = number;
+
+        // Calculate result
+        while (originalNumber != 0) {
+            remainder = originalNumber % 10;
+            result += Math.pow(remainder, n);
+            originalNumber /= 10;
+        }
+
+        return result == number;
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+}
+
+
+XML CODE
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/getnum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter a number"
+        android:layout_margin="16dp"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/check_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check"
+        android:layout_below="@id/getnum"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+</RelativeLayout>
+
+Write a program to draw GUI by using Spinner, Buttons
+
+XML CODE
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Spinner
+        android:id="@+id/color_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:entries="@array/color_options"/>
+
+    <Button
+        android:id="@+id/draw_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Draw"
+        android:layout_below="@id/color_spinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/reset_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:layout_below="@id/draw_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <View
+        android:id="@+id/drawing_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/reset_button"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/white"/>
+
+</RelativeLayout>
+
+ARRAYS.XML
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="color_options">
+        <item>Red</item>
+        <item>Green</item>
+        <item>Blue</item>
+    </string-array>
+</resources>
+
+
+JAVA CODE
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private Spinner colorSpinner;
+    private Button drawButton, resetButton;
+    private View drawingView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        colorSpinner = findViewById(R.id.color_spinner);
+        drawButton = findViewById(R.id.draw_button);
+        resetButton = findViewById(R.id.reset_button);
+        drawingView = findViewById(R.id.drawing_view);
+
+        // Set up the Spinner with color options
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.color_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        colorSpinner.setAdapter(adapter);
+
+        // Set listener for Spinner item selection
+        colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedColor = (String) parent.getItemAtPosition(position);
+                Toast.makeText(MainActivity.this, "Selected color: " + selectedColor, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        // Set listener for Draw button
+        drawButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String selectedColor = colorSpinner.getSelectedItem().toString();
+                draw(selectedColor);
+            }
+        });
+
+        // Set listener for Reset button
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reset();
+            }
+        });
+    }
+
+    private void draw(String color) {
+        switch (color.toLowerCase()) {
+            case "red":
+                drawingView.setBackgroundColor(Color.RED);
+                break;
+            case "green":
+                drawingView.setBackgroundColor(Color.GREEN);
+                break;
+            case "blue":
+                drawingView.setBackgroundColor(Color.BLUE);
+                break;
+        }
+    }
+
+    private void reset() {
+        drawingView.setBackgroundColor(Color.WHITE);
+    }
+}
+
+

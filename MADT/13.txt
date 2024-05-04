@@ -1,0 +1,272 @@
+Q.1] Java android program to demonstrate Registration form with validation.
+
+JAVA CODE
+
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText nameEditText, addressEditText, mobileEditText, ageEditText;
+    Button submitButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        nameEditText = findViewById(R.id.name_editText);
+        addressEditText = findViewById(R.id.address_editText);
+        mobileEditText = findViewById(R.id.mobile_editText);
+        ageEditText = findViewById(R.id.age_editText);
+        submitButton = findViewById(R.id.submit_button);
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validateAndSubmit();
+            }
+        });
+    }
+
+    private void validateAndSubmit() {
+        String name = nameEditText.getText().toString().trim();
+        String address = addressEditText.getText().toString().trim();
+        String mobile = mobileEditText.getText().toString().trim();
+        String ageStr = ageEditText.getText().toString().trim();
+
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(address) || TextUtils.isEmpty(mobile) || TextUtils.isEmpty(ageStr)) {
+            showToast("All fields are required.");
+            return;
+        }
+
+        if (mobile.length() != 10 || !TextUtils.isDigitsOnly(mobile)) {
+            showToast("Please enter a valid 10-digit mobile number.");
+            return;
+        }
+
+        int age;
+        try {
+            age = Integer.parseInt(ageStr);
+        } catch (NumberFormatException e) {
+            showToast("Please enter a valid age.");
+            return;
+        }
+
+        if (age <= 0) {
+            showToast("Please enter a valid age.");
+            return;
+        }
+
+        // All validations passed, proceed with registration
+        showToast("Registration successful:\nName: " + name + "\nAddress: " + address + "\nMobile No: " + mobile + "\nAge: " + age);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+}
+
+
+XML CODE
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/name_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:layout_margin="16dp"/>
+
+    <EditText
+        android:id="@+id/address_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_editText"
+        android:hint="Address"
+        android:layout_margin="16dp"/>
+
+    <EditText
+        android:id="@+id/mobile_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address_editText"
+        android:hint="Mobile No"
+        android:inputType="phone"
+        android:layout_margin="16dp"/>
+
+    <EditText
+        android:id="@+id/age_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mobile_editText"
+        android:hint="Age"
+        android:inputType="number"
+        android:layout_margin="16dp"/>
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/age_editText"
+        android:layout_centerHorizontal="true"
+        android:text="Submit"
+        android:layout_marginTop="16dp"/>
+
+</RelativeLayout>
+
+
+
+Write a Java Android Program to Demonstrate List View Activity with all operations Such as: Insert, Delete, Search
+
+
+JAVA CODE
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText itemEditText, searchEditText;
+    Button insertButton, deleteButton, searchButton;
+    ListView listView;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> itemList;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        itemEditText = findViewById(R.id.item_editText);
+        searchEditText = findViewById(R.id.search_editText);
+        insertButton = findViewById(R.id.insert_button);
+        deleteButton = findViewById(R.id.delete_button);
+        searchButton = findViewById(R.id.search_button);
+        listView = findViewById(R.id.list_view);
+
+        itemList = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, itemList);
+        listView.setAdapter(adapter);
+
+        insertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String item = itemEditText.getText().toString().trim();
+                if (!item.isEmpty()) {
+                    itemList.add(item);
+                    adapter.notifyDataSetChanged();
+                    itemEditText.setText("");
+                }
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String item = itemEditText.getText().toString().trim();
+                if (!item.isEmpty() && itemList.contains(item)) {
+                    itemList.remove(item);
+                    adapter.notifyDataSetChanged();
+                    itemEditText.setText("");
+                } else {
+                    Toast.makeText(MainActivity.this, "Item not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchItem = searchEditText.getText().toString().trim();
+                if (!searchItem.isEmpty() && itemList.contains(searchItem)) {
+                    int index = itemList.indexOf(searchItem);
+                    listView.setSelection(index);
+                } else {
+                    Toast.makeText(MainActivity.this, "Item not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+}
+
+
+XML CODE
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/item_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter item"
+        android:layout_margin="16dp"/>
+
+    <Button
+        android:id="@+id/insert_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Insert"
+        android:layout_below="@id/item_editText"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:layout_below="@id/insert_button"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/search_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search item"
+        android:layout_below="@id/delete_button"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
+
+    <Button
+        android:id="@+id/search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:layout_below="@id/search_editText"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_button"
+        android:layout_marginTop="16dp"/>
+
+</RelativeLayout>
