@@ -1,0 +1,105 @@
+Create 'Dynamic Web Project', which will host your web service functionality to 
+convert weight from kilograms to gram and create 'Dynamic Web Project', which 
+will host the client application that tests the web service.
+
+WeightConversionServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+public class WeightConversionServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ // Get weight in kilograms from request parameter
+ double kilograms = Double.parseDouble(request.getParameter("kilograms"));
+ // Convert kilograms to grams
+ double grams = kilograms * 1000;
+ // Prepare response
+ String result = "Weight in grams: " + grams;
+ // Send response
+ response.getWriter().write(result);
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weight Converter</title>
+</head>
+<body>
+<h2>Convert Weight from Kilograms to Grams</h2>
+<form action="WeightConversionServlet" method="get">
+Enter weight in kilograms: <input type="number" name="kilograms" step="0.01" required>
+<br>
+<input type="submit" value="Convert">
+</form>
+</body>
+</html>
+
+
+Create 'Dynamic Web Project', which will host your web service functionality to 
+convert Celsius to Fahrenheit and create 'Dynamic Web Project', which will host 
+the client application that will send Celsius and test the web service
+
+TemperatureConverterServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.IOException;
+import java.io.PrintWriter;
+public class TemperatureConverterServlet extends HttpServlet {
+private static final long serialVersionUID = 1L;
+ protected void doGet(HttpServletRequest request, HttpServletResponse response)
+ throws ServletException, IOException {
+ response.setContentType("text/html;charset=UTF-8");
+ PrintWriter out = response.getWriter();
+ // Get the input parameter 'celsius' from the client
+ String celsiusParam = request.getParameter("celsius");
+ try {
+ // Convert the parameter to a double
+ double celsius = Double.parseDouble(celsiusParam);
+ // Convert Celsius to Fahrenheit
+ double fahrenheit = celsiusToFahrenheit(celsius);
+ // Send the result back to the client
+ out.println("<html>");
+ out.println("<head><title>Temperature Conversion</title></head>");
+ out.println("<body>");
+ out.println("<h2>" + celsius + " Celsius is equal to " + fahrenheit + " Fahrenheit</h2>");
+ out.println("</body>");
+ out.println("</html>");
+ } catch (NumberFormatException e) {
+ // Handle invalid input
+ out.println("<html>");
+ out.println("<head><title>Error</title></head>");
+ out.println("<body>");
+ out.println("<h2>Invalid input. Please provide a valid number for Celsius.</h2>");
+ out.println("</body>");
+ out.println("</html>");
+ }
+ }
+ private double celsiusToFahrenheit(double celsius) {
+ return (celsius * 9 / 5) + 32;
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Temperature Converter Client</title>
+</head>
+<body>
+<h2>Temperature Converter Client</h2>
+<form action="TemperatureConverterServlet" method="get">
+<label for="celsius">Enter Celsius temperature:</label>
+<input type="number" id="celsius" name="celsius" required>
+<input type="submit" value="Convert to Fahrenheit">
+</form>
+</body>
+</html>

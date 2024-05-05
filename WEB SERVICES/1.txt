@@ -1,0 +1,116 @@
+Create 'Dynamic Web Project', which will host your web service functionality to 
+find the factorial of given number and create 'Dynamic Web Project', which will 
+host the client application that will send positive integer number and test the web 
+service.
+
+FactorialServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.IOException;
+import java.io.PrintWriter;
+@WebServlet("/FactorialServlet")
+public class FactorialServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ int number = Integer.parseInt(request.getParameter("number"));
+ 
+ long factorial = 1;
+ for (int i = 2; i <= number; i++) {
+ factorial *= i;
+ }
+ String result = "Factorial of " + number + " is: " + factorial;
+ 
+ response.getWriter().write(result);
+ }
+}
+
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Factorial Calculator</title>
+</head>
+<body>
+<h2>Calculate Factorial</h2>
+<form action="FactorialServlet" method="get">
+Enter a positive integer: <input type="number" name="number" min="1" required><br>
+<input type="submit" value="Calculate Factorial">
+</form>
+</body>
+</html>
+
+
+Create 'Dynamic Web Project', which will host your web service functionality to 
+convert Rupees to Dollar, Pound, Euro,…..and create 'Dynamic Web Project', 
+which will host the client application that will send amount in Rupees & type of 
+conversion and tests the web service.
+
+CurrencyConversionServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+public class CurrencyConversionServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+
+ double rupees = Double.parseDouble(request.getParameter("rupees"));
+ 
+ String conversionType = request.getParameter("conversionType");
+
+ double result = 0;
+ switch (conversionType) {
+ case "dollar":
+ result = rupees / 73.5; 
+ break;
+ case "pound":
+ result = rupees / 100.5; 
+ break;
+ case "euro":
+ result = rupees / 87.8; 
+ break;
+ // Add more cases for other currencies as needed
+ default:
+ result = 0; 
+ break;
+ }
+ String responseText = "";
+ if (result != 0) {
+ responseText = "Amount in " + conversionType + ": " + result;
+ } else {
+ responseText = "Invalid conversion type";
+ }
+ response.getWriter().write(responseText);
+ }
+}
+
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Currency Converter</title>
+</head>
+<body>
+<h2>Convert Rupees to Other Currencies</h2>
+<form action="CurrencyConversionServlet" method="get">
+Enter amount in Rupees: <input type="number" name="rupees" step="0.01" required>
+<br>
+Select currency:
+<select name="conversionType">
+<option value="dollar">US Dollar</option>
+<option value="pound">British Pound</option>
+<option value="euro">Euro</option>
+</select><br>
+<input type="submit" value="Convert">
+</form>
+</body>
+</html>

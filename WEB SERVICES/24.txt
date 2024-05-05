@@ -1,0 +1,112 @@
+Create 'Dynamic Web Project', which will host your web service functionality to 
+find the factorial of given number and create 'Dynamic Web Project', which will 
+host the client application that will send positive integer number and test the web 
+service.
+
+FactorialServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.IOException;
+import java.io.PrintWriter;
+@WebServlet("/FactorialServlet")
+public class FactorialServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ int number = Integer.parseInt(request.getParameter("number"));
+ 
+ long factorial = 1;
+ for (int i = 2; i <= number; i++) {
+ factorial *= i;
+ }
+ String result = "Factorial of " + number + " is: " + factorial;
+ 
+ response.getWriter().write(result);
+ }
+}
+
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Factorial Calculator</title>
+</head>
+<body>
+<h2>Calculate Factorial</h2>
+<form action="FactorialServlet" method="get">
+Enter a positive integer: <input type="number" name="number" min="1" required><br>
+<input type="submit" value="Calculate Factorial">
+</form>
+</body>
+</html>
+
+
+Create 'Dynamic Web Project', which will host your web service functionality to 
+convert Celsius to Fahrenheit and create 'Dynamic Web Project', which will host 
+the client application that will send Celsius and test the web service
+
+TemperatureConverterServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.IOException;
+import java.io.PrintWriter;
+public class TemperatureConverterServlet extends HttpServlet {
+private static final long serialVersionUID = 1L;
+ protected void doGet(HttpServletRequest request, HttpServletResponse response)
+ throws ServletException, IOException {
+ response.setContentType("text/html;charset=UTF-8");
+ PrintWriter out = response.getWriter();
+ // Get the input parameter 'celsius' from the client
+ String celsiusParam = request.getParameter("celsius");
+ try {
+ // Convert the parameter to a double
+ double celsius = Double.parseDouble(celsiusParam);
+ // Convert Celsius to Fahrenheit
+ double fahrenheit = celsiusToFahrenheit(celsius);
+ // Send the result back to the client
+ out.println("<html>");
+ out.println("<head><title>Temperature Conversion</title></head>");
+ out.println("<body>");
+ out.println("<h2>" + celsius + " Celsius is equal to " + fahrenheit + " Fahrenheit</h2>");
+ out.println("</body>");
+ out.println("</html>");
+ } catch (NumberFormatException e) {
+ // Handle invalid input
+ out.println("<html>");
+ out.println("<head><title>Error</title></head>");
+ out.println("<body>");
+ out.println("<h2>Invalid input. Please provide a valid number for Celsius.</h2>");
+ out.println("</body>");
+ out.println("</html>");
+ }
+ }
+ private double celsiusToFahrenheit(double celsius) {
+ return (celsius * 9 / 5) + 32;
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Temperature Converter Client</title>
+</head>
+<body>
+<h2>Temperature Converter Client</h2>
+<form action="TemperatureConverterServlet" method="get">
+<label for="celsius">Enter Celsius temperature:</label>
+<input type="number" id="celsius" name="celsius" required>
+<input type="submit" value="Convert to Fahrenheit">
+</form>
+</body>
+</html>
+
+

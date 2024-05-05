@@ -1,0 +1,104 @@
+Create 'Dynamic Web Project', which will host your web service functionality to 
+convert weight from kilograms to gram and create 'Dynamic Web Project', which 
+will host the client application that tests the web service.
+
+WeightConversionServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+public class WeightConversionServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ // Get weight in kilograms from request parameter
+ double kilograms = Double.parseDouble(request.getParameter("kilograms"));
+ // Convert kilograms to grams
+ double grams = kilograms * 1000;
+ // Prepare response
+ String result = "Weight in grams: " + grams;
+ // Send response
+ response.getWriter().write(result);
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weight Converter</title>
+</head>
+<body>
+<h2>Convert Weight from Kilograms to Grams</h2>
+<form action="WeightConversionServlet" method="get">
+Enter weight in kilograms: <input type="number" name="kilograms" step="0.01" required>
+<br>
+<input type="submit" value="Convert">
+</form>
+</body>
+</html>
+
+
+Create 'Dynamic Web Project', which will host your web service functionality to 
+validate email id (use regular expression) and create 'Dynamic Web Project', 
+which will host the client application that will send email id and test the web 
+service.
+
+EmailValidatorServlet.java
+package com.example;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+public class EmailValidatorServlet extends HttpServlet {
+ private static final long serialVersionUID = 1L;
+ protected void doGet(HttpServletRequest request, HttpServletResponse response)
+ throws ServletException, IOException {
+ response.setContentType("text/html;charset=UTF-8");
+ PrintWriter out = response.getWriter();
+ // Get the input parameter 'email' from the client
+ String email = request.getParameter("email");
+ // Validate the email using regular expression
+ boolean isValid = isValidEmail(email);
+ // Send the result back to the client
+ out.println("<html>");
+ out.println("<head><title>Email Validation</title></head>");
+ out.println("<body>");
+ out.println("<h2>The email address '" + email + "' is " + (isValid ? "valid" : "invalid") + ".
+</h2>");
+ out.println("</body>");
+ out.println("</html>");
+ }
+ private boolean isValidEmail(String email) {
+ // Regular expression for a valid email address
+ String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[azA-Z]{2,7}$";
+ Pattern pattern = Pattern.compile(emailRegex);
+ Matcher matcher = pattern.matcher(email);
+ return matcher.matches();
+ }
+}
+
+
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h2>Email Validator Client</h2>
+<form action="EmailValidatorServlet" method="get">
+<label for="email">Enter an email address:</label>
+<input type="text" id="email" name="email" required>
+<input type="submit" value="Validate Email">
+</form>
+</body>
+</html>

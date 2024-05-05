@@ -1,0 +1,92 @@
+Create 'Dynamic Web Project', which will host your web service functionality to 
+find area and volume of the rectangle and create 'Dynamic Web Project', which 
+will host the client application that tests the web service.
+
+RectangleServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+/**
+* Servlet implementation class RectangleServlet
+*/
+public class RectangleServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ // Get dimensions of the rectangle from request parameters
+ double length = Double.parseDouble(request.getParameter("length"));
+ double width = Double.parseDouble(request.getParameter("width"));
+ double height = Double.parseDouble(request.getParameter("height"));
+ // Calculate area and volume
+ double area = length * width;
+ double volume = area * height;
+ // Prepare response
+ String result = "Area of the rectangle: " + area + ", Volume of the rectangle: " + volume;
+ // Send response
+ response.getWriter().write(result);
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Rectangle Calculator</title>
+</head>
+<body>
+<h2>Calculate Area and Volume of Rectangle</h2>
+<form action="RectangleServlet" method="get">
+Length: <input type="number" name="length" required><br>
+Width: <input type="number" name="width" required><br>
+Height: <input type="number" name="height" required><br>
+<input type="submit" value="Calculate">
+</form>
+</body>
+</html>
+
+Create 'Dynamic Web Project', which will host your web service functionality to 
+validate mobile no (use regular expression: should contain only 10 numeric no) and 
+create 'Dynamic Web Project', which will host the client application that will send 
+mobile no and test the web service
+
+MobileNumberValidationServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+public class MobileNumberValidationServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ String mobileNumber = request.getParameter("mobileNumber");
+ String regex = "^[0-9]{10}$";
+ 
+ Pattern pattern = Pattern.compile(regex);
+ Matcher matcher = pattern.matcher(mobileNumber);
+ 
+ boolean isValid = matcher.matches();
+ 
+ response.getWriter().write(String.valueOf(isValid));
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mobile Number Validation</title>
+</head>
+<body>
+<h2>Validate Mobile Number</h2>
+<form action="MobileNumberValidationServlet" method="get">
+Enter mobile number: <input type="text" name="mobileNumber" required
+pattern="\d{10}"><br>
+<input type="submit" value="Validate">
+</form>
+</body>
+</html>

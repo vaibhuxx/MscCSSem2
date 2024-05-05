@@ -1,0 +1,132 @@
+Create 'Dynamic Web Project', which will host your web service functionality to 
+greet the user according to server time and create 'Dynamic Web Project', which 
+will host the client application that will send user name and test the web service
+
+GreetingServlet.java
+
+package com.example;
+import jakarta.servlet.ServletException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+public class GreetingServlet extends HttpServlet {
+private static final long serialVersionUID = 1L;
+ protected void doGet(HttpServletRequest request, HttpServletResponse response)
+ throws ServletException, IOException {
+ response.setContentType("text/html;charset=UTF-8");
+ PrintWriter out = response.getWriter();
+ SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+ Date currentTime = new Date();
+ String time = sdf.format(currentTime);
+ 
+ String greeting = getGreeting(currentTime.getHours());
+ String username = request.getParameter("username");
+ out.println("<html>");
+ out.println("<head><title>Greeting</title></head>");
+ out.println("<body>");
+ out.println("<h2>" + greeting + ", " + username + "! The current time is: " + time + "</h2>");
+ out.println("</body>");
+ out.println("</html>");
+ }
+ private String getGreeting(int hour) {
+ if (hour >= 5 && hour < 12) {
+ return "Good Morning";
+ } else if (hour >= 12 && hour < 17) {
+ return "Good Afternoon";
+ } else if (hour >= 17 && hour < 20) {
+ return "Good Evening";
+ } else {
+ return "Good Night";
+ }
+ }
+}
+
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Greeting Client</title>
+</head>
+<body>
+<h2>Greeting Client</h2>
+<form action="GreetingServlet" method="get">
+<label for="username">Enter your name:</label>
+<input type="text" id="username" name="username" required>
+<input type="submit" value="Submit">
+</form>
+</body>
+</html>
+
+Create 'Dynamic Web Project', which will host your web service functionality for 
+returning price of a stationary item and create 'Dynamic Web Project', which will 
+host the client application that will send Name of any stationary item.
+
+StationaryServlet.java
+
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.IOException;
+import java.io.PrintWriter;
+public class StationaryServlet extends HttpServlet {
+ private static final long serialVersionUID = 1L;
+ protected void doGet(HttpServletRequest request, HttpServletResponse response)
+ throws ServletException, IOException {
+ response.setContentType("text/html;charset=UTF-8");
+ PrintWriter out = response.getWriter();
+ // Get the input parameter 'item' from the client
+ String item = request.getParameter("item");
+ // Get the price based on the stationary item
+ double price = getPrice(item);
+ // Send the result back to the client
+ out.println("<html>");
+ out.println("<head><title>Stationary Price</title></head>");
+ out.println("<body>");
+ out.println("<h2>The price of " + item + " is: Rupees" + price + "</h2>");
+ out.println("</body>");
+ out.println("</html>");
+ }
+ private double getPrice(String item) {
+ // You can implement your logic here to get the price based on the stationary item
+ // For simplicity, let's use a simple mapping
+ switch (item.toLowerCase()) {
+ case "pen":
+ return 15;
+ case "notebook":
+ return 30;
+ case "pencil":
+ return 5;
+ default:
+ return 0.00; // Default price for unknown items
+ }
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h2>Stationary Shop Client</h2>
+<form action="StationaryServlet" method="get">
+<label for="item">Enter the name of a stationary item:</label>
+<input type="text" id="item" name="item" required>
+<input type="submit" value="Get Price">
+</form>
+</body>
+</html>
+
+
+

@@ -1,0 +1,111 @@
+Create 'Dynamic Web Project', which will host your web service functionality to 
+find the factorial of given number and create 'Dynamic Web Project', which will 
+host the client application that will send positive integer number and test the web 
+service.
+
+FactorialServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.IOException;
+import java.io.PrintWriter;
+@WebServlet("/FactorialServlet")
+public class FactorialServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ int number = Integer.parseInt(request.getParameter("number"));
+ 
+ long factorial = 1;
+ for (int i = 2; i <= number; i++) {
+ factorial *= i;
+ }
+ String result = "Factorial of " + number + " is: " + factorial;
+ 
+ response.getWriter().write(result);
+ }
+}
+
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Factorial Calculator</title>
+</head>
+<body>
+<h2>Calculate Factorial</h2>
+<form action="FactorialServlet" method="get">
+Enter a positive integer: <input type="number" name="number" min="1" required><br>
+<input type="submit" value="Calculate Factorial">
+</form>
+</body>
+</html>
+
+
+Create 'Dynamic Web Project', which will host your web service functionality for 
+returning price of a stationary item and create 'Dynamic Web Project', which will 
+host the client application that will send Name of any stationary item.
+
+StationaryServlet.java
+
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.IOException;
+import java.io.PrintWriter;
+public class StationaryServlet extends HttpServlet {
+ private static final long serialVersionUID = 1L;
+ protected void doGet(HttpServletRequest request, HttpServletResponse response)
+ throws ServletException, IOException {
+ response.setContentType("text/html;charset=UTF-8");
+ PrintWriter out = response.getWriter();
+ // Get the input parameter 'item' from the client
+ String item = request.getParameter("item");
+ // Get the price based on the stationary item
+ double price = getPrice(item);
+ // Send the result back to the client
+ out.println("<html>");
+ out.println("<head><title>Stationary Price</title></head>");
+ out.println("<body>");
+ out.println("<h2>The price of " + item + " is: Rupees" + price + "</h2>");
+ out.println("</body>");
+ out.println("</html>");
+ }
+ private double getPrice(String item) {
+ // You can implement your logic here to get the price based on the stationary item
+ // For simplicity, let's use a simple mapping
+ switch (item.toLowerCase()) {
+ case "pen":
+ return 15;
+ case "notebook":
+ return 30;
+ case "pencil":
+ return 5;
+ default:
+ return 0.00; // Default price for unknown items
+ }
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h2>Stationary Shop Client</h2>
+<form action="StationaryServlet" method="get">
+<label for="item">Enter the name of a stationary item:</label>
+<input type="text" id="item" name="item" required>
+<input type="submit" value="Get Price">
+</form>
+</body>
+</html>

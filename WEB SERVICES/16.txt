@@ -1,0 +1,107 @@
+Create 'Dynamic Web Project', which will host your web service functionality to 
+convert weight from kilograms to gram and create 'Dynamic Web Project', which 
+will host the client application that tests the web service.
+
+WeightConversionServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+public class WeightConversionServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ // Get weight in kilograms from request parameter
+ double kilograms = Double.parseDouble(request.getParameter("kilograms"));
+ // Convert kilograms to grams
+ double grams = kilograms * 1000;
+ // Prepare response
+ String result = "Weight in grams: " + grams;
+ // Send response
+ response.getWriter().write(result);
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weight Converter</title>
+</head>
+<body>
+<h2>Convert Weight from Kilograms to Grams</h2>
+<form action="WeightConversionServlet" method="get">
+Enter weight in kilograms: <input type="number" name="kilograms" step="0.01" required>
+<br>
+<input type="submit" value="Convert">
+</form>
+</body>
+</html>
+
+
+
+Create 'Dynamic Web Project', which will host your web service functionality for 
+returning price of a stationary item and create 'Dynamic Web Project', which will 
+host the client application that will send Name of any stationary item.
+
+StationaryServlet.java
+
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.IOException;
+import java.io.PrintWriter;
+public class StationaryServlet extends HttpServlet {
+ private static final long serialVersionUID = 1L;
+ protected void doGet(HttpServletRequest request, HttpServletResponse response)
+ throws ServletException, IOException {
+ response.setContentType("text/html;charset=UTF-8");
+ PrintWriter out = response.getWriter();
+ // Get the input parameter 'item' from the client
+ String item = request.getParameter("item");
+ // Get the price based on the stationary item
+ double price = getPrice(item);
+ // Send the result back to the client
+ out.println("<html>");
+ out.println("<head><title>Stationary Price</title></head>");
+ out.println("<body>");
+ out.println("<h2>The price of " + item + " is: Rupees" + price + "</h2>");
+ out.println("</body>");
+ out.println("</html>");
+ }
+ private double getPrice(String item) {
+ // You can implement your logic here to get the price based on the stationary item
+ // For simplicity, let's use a simple mapping
+ switch (item.toLowerCase()) {
+ case "pen":
+ return 15;
+ case "notebook":
+ return 30;
+ case "pencil":
+ return 5;
+ default:
+ return 0.00; // Default price for unknown items
+ }
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h2>Stationary Shop Client</h2>
+<form action="StationaryServlet" method="get">
+<label for="item">Enter the name of a stationary item:</label>
+<input type="text" id="item" name="item" required>
+<input type="submit" value="Get Price">
+</form>
+</body>
+</html>

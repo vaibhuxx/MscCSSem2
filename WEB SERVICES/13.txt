@@ -1,0 +1,113 @@
+Create 'Dynamic Web Project', which will host your web service functionality to 
+find number of vowels in the given string and create 'Dynamic Web Project', which 
+will host the client application that tests the web service
+
+VowelCountServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+public class VowelCountServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ String inputString = request.getParameter("inputString");
+ int vowelCount = 0;
+ if (inputString != null && !inputString.isEmpty()) {
+ for (char c : inputString.toLowerCase().toCharArray()) {
+ if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+ vowelCount++;
+ }
+ }
+ }
+ response.getWriter().write("Number of vowels in the given string: " + vowelCount);
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Vowel Count Client</title>
+</head>
+<body>
+<h2>Count Vowels</h2>
+<form action="VowelCountServlet" method="get">
+Enter a string: <input type="text" name="inputString" required><br>
+<input type="submit" value="Count Vowels">
+</form>
+</body>
+</html>
+
+
+Create 'Dynamic Web Project', which will host your web service functionality to 
+convert Rupees to Dollar, Pound, Euro,…..and create 'Dynamic Web Project', 
+which will host the client application that will send amount in Rupees & type of 
+conversion and tests the web service.
+
+CurrencyConversionServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+public class CurrencyConversionServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ // Get amount in Rupees from request parameter
+ double rupees = Double.parseDouble(request.getParameter("rupees"));
+ // Get type of conversion from request parameter
+ String conversionType = request.getParameter("conversionType");
+ // Convert rupees to the selected currency
+ double result = 0;
+ switch (conversionType) {
+ case "dollar":
+ result = rupees / 73.5; // Assuming 1 Rupee = 0.014 USD
+ break;
+ case "pound":
+ result = rupees / 100.5; // Assuming 1 Rupee = 0.0099 GBP
+ break;
+ case "euro":
+ result = rupees / 87.8; // Assuming 1 Rupee = 0.0114 EUR
+ break;
+ // Add more cases for other currencies as needed
+ default:
+ result = 0; // Invalid conversion type
+ break;
+ }
+ // Prepare response
+ String responseText = "";
+ if (result != 0) {
+ responseText = "Amount in " + conversionType + ": " + result;
+ } else {
+ responseText = "Invalid conversion type";
+ }
+ // Send response
+ response.getWriter().write(responseText);
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Currency Converter</title>
+</head>
+<body>
+<h2>Convert Rupees to Other Currencies</h2>
+<form action="CurrencyConversionServlet" method="get">
+Enter amount in Rupees: <input type="number" name="rupees" step="0.01" required>
+<br>
+Select currency:
+<select name="conversionType">
+<option value="dollar">US Dollar</option>
+<option value="pound">British Pound</option>
+<option value="euro">Euro</option>
+<!-- Add more options for other currencies as needed -->
+</select><br>
+<input type="submit" value="Convert">
+</form>
+</body>
+</html>

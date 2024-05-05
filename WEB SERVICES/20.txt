@@ -1,0 +1,92 @@
+Create 'Dynamic Web Project', which will host your web service functionality to 
+find the factorial of given number and create 'Dynamic Web Project', which will 
+host the client application that will send positive integer number and test the web 
+service.
+
+FactorialServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.IOException;
+import java.io.PrintWriter;
+@WebServlet("/FactorialServlet")
+public class FactorialServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ int number = Integer.parseInt(request.getParameter("number"));
+ 
+ long factorial = 1;
+ for (int i = 2; i <= number; i++) {
+ factorial *= i;
+ }
+ String result = "Factorial of " + number + " is: " + factorial;
+ 
+ response.getWriter().write(result);
+ }
+}
+
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Factorial Calculator</title>
+</head>
+<body>
+<h2>Calculate Factorial</h2>
+<form action="FactorialServlet" method="get">
+Enter a positive integer: <input type="number" name="number" min="1" required><br>
+<input type="submit" value="Calculate Factorial">
+</form>
+</body>
+</html>
+
+
+Create 'Dynamic Web Project', which will host your web service functionality to 
+validate mobile no (use regular expression: should contain only 10 numeric no) 
+and create 'Dynamic Web Project', which will host the client application that will 
+send mobile no and test the web service.
+
+MobileNumberValidationServlet.java
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+public class MobileNumberValidationServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+ServletException, IOException {
+ String mobileNumber = request.getParameter("mobileNumber");
+ String regex = "^[0-9]{10}$";
+ 
+ Pattern pattern = Pattern.compile(regex);
+ Matcher matcher = pattern.matcher(mobileNumber);
+ 
+ boolean isValid = matcher.matches();
+ 
+ response.getWriter().write(String.valueOf(isValid));
+ }
+}
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mobile Number Validation</title>
+</head>
+<body>
+<h2>Validate Mobile Number</h2>
+<form action="MobileNumberValidationServlet" method="get">
+Enter mobile number: <input type="text" name="mobileNumber" required
+pattern="\d{10}"><br>
+<input type="submit" value="Validate">
+</form>
+</body>
+</html>
+
